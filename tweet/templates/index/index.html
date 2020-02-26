@@ -1,0 +1,54 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='{% static "css/index.css" %}' rel='stylesheet' />
+    <title>Document</title>
+</head>
+<body>
+    <div class='container'>
+        <div class="column-side">
+        </div>
+
+        <div class="column-main">
+            <header>
+                <h1>{{ request.user.username }}'s profile</h1>
+                
+                <div class='tweet-header'>
+                    <div class='profile-pic'>
+                        <img /> 
+                    </div>
+                    <div class="submission-container">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <input class="tweet-submit" type="submit" value="Tweet">
+                        </form>
+                    </div>
+                </div>
+            </header>
+
+            <div class="tweet-container">
+                {% for tweet in tweets %}
+                    <div class="tweet card">
+                        <header>
+                            <a href="">
+                                @{{ tweet.created_by.username }}
+                            </a>
+                            tweeted at 
+                            {{ tweet.created_at }}
+                        </header>
+                        <div>
+                            {{ tweet.text }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="column-side">
+        </div>
+    </div>
+</body>
+</html>
