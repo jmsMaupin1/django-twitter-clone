@@ -9,6 +9,7 @@ from twitteruser.models import TwitterUser
 @login_required()
 def index(request):
     tweets = None
+    users = None
     if request.method == 'POST':
         form = TweetForm(request.POST)
 
@@ -19,12 +20,14 @@ def index(request):
 
     try:
         tweets = Tweet.objects.all()
+        users = TwitterUser.objects.all()
     except Exception:
         pass
 
     return render(request, 'index/index.html', {
         'form': TweetForm(),
-        'tweets': tweets
+        'tweets': tweets,
+        'users': users
     })
 
 

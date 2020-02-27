@@ -11,15 +11,21 @@
         <div class="column-side">
             <div class='sidebar-menu'>
                 <a href="/user/{{request.user.id}}">
-                    Profile
+                    {{request.user.username}}
                 </a>
             </div>
         </div>
 
         <div class="column-main">
             <header>
-                <h1>{{ request.user.username }}'s HomePage</h1>
-                
+                <div class='follow-container'>
+                    {% if user.id != request.user.id %}
+                        <a class="follow-link" href="/follow/{{user.id}}">
+                            Folow
+                        </a>
+                    {% endif %}
+                </div>
+                <h1>{{ user.username }}'s Profile</h1>
                 <div class='tweet-header'>
                     <div class='profile-pic'>
                         <img /> 
@@ -28,8 +34,13 @@
                         <form action="" method="post">
                             {% csrf_token %}
                             {{ form.as_p }}
-                            <input class="tweet-submit" type="submit" value="Tweet">
+                            {% if form%}
+                                <input class="tweet-submit" type="submit" value="Tweet">   
+                            {% endif %}
                         </form>
+                    </div>
+                    <div>
+                        <span>Tweet Count: {{tweets|length}}</span>
                     </div>
                 </div>
             </header>
