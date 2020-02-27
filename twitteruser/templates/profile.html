@@ -10,8 +10,13 @@
     <div class='container'>
         <div class="column-side">
             <div class='sidebar-menu'>
+                <a href="/">
+                    Home
+                </a>
+            </div>
+            <div class='sidebar-menu'>
                 <a href="/user/{{request.user.id}}">
-                    {{request.user.username}}
+                    Profile
                 </a>
             </div>
         </div>
@@ -20,9 +25,15 @@
             <header>
                 <div class='follow-container'>
                     {% if user.id != request.user.id %}
-                        <a class="follow-link" href="/follow/{{user.id}}">
-                            Folow
-                        </a>
+                        {% if not is_following %}
+                            <a class="follow-link" href="/follow/{{user.id}}">
+                                Follow
+                            </a>
+                        {% else %}
+                            <a class="follow-link" href='/unfollow/{{user.id}}'>
+                                Unfollow
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </div>
                 <h1>{{ user.username }}'s Profile</h1>
@@ -41,6 +52,7 @@
                     </div>
                     <div>
                         <span>Tweet Count: {{tweets|length}}</span>
+                        <span>Following Count: {{user.following.count}}
                     </div>
                 </div>
             </header>
@@ -76,7 +88,7 @@
                                 {{user.username}}
                             </header>
                             <footer>
-                                {{user.username.followers | length}}
+                                {{user.following.count}}
                             </footer>
                         </div>
                     </a>
