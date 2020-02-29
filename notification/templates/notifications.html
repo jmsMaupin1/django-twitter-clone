@@ -1,0 +1,53 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='{% static "css/index.css" %}' rel='stylesheet' />
+    <title>Notifications</title>
+</head>
+<body>
+    <div class='container'>
+        <div class="column-side">
+            <div class='sidebar-menu'>
+                <a href="/">
+                    Home
+                </a>
+            </div>
+            <div class='sidebar-menu'>
+                <a href="/user/{{request.user.id}}">
+                    Profile
+                </a>
+            </div>
+        </div>
+
+        <div class="column-main">
+            {% for notification in notifications %}
+                <a href="/tweet/{{notification.tweet.id}}">
+                    <div class='card'>
+                        from: {{notification.tweet.created_by}}
+                        text: {{notification.tweet.text}}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+
+        <div class="column-side">
+            {% for user in users %}
+                {% if user.id != request.user.id %}
+                    <a href="/user/{{user.id}}" />  
+                        <div class="card user-container">
+                            <header>
+                                {{user.username}}
+                            </header>
+                            <footer>
+                                {{user.following.count}}
+                            </footer>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
