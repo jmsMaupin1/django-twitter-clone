@@ -3,19 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='{% static "css/tweet-detail.css" %}' rel='stylesheet' />
-    <title>Document</title>
+    <link href='{% static "css/index.css" %}' rel='stylesheet' />
+    <title>Notifications</title>
 </head>
 <body>
     <div class='container'>
-        <div class="tweet">
-            <header>
-                Tweeted by: @{{tweet.created_by.username}}, at 
-                {{tweet.created_at}}
-            </header>
-            <div class="tweet-text">
-                {{tweet.text}}
+        <div class="column-side">
+            <div class='sidebar-menu'>
+                <a href="/">
+                    Home
+                </a>
             </div>
+            <div class='sidebar-menu'>
+                <a href="/user/{{request.user.id}}">
+                    Profile
+                </a>
+            </div>
+        </div>
+
+        <div class="column-main">
+            <div class="tweet card">
+                <header>
+                    <a href="/user/{{tweet.created_by.id}}">
+                        @{{ tweet.created_by.username }}
+                    </a>
+                </header>
+                <div>
+                    {{ tweet.text }} 
+                </div>
+                <footer>
+                    <a href="/tweet/{{tweet.id}}">
+                        Tweet
+                    </a>, 
+                    {{tweet.created_at}}
+                </footer>
+            </div>
+        </div>
+
+        <div class="column-side">
+            {% for user in users %}
+                {% if user.id != request.user.id %}
+                    <a href="/user/{{user.id}}" />  
+                        <div class="card user-container">
+                            <header>
+                                {{user.username}}
+                            </header>
+                            <footer>
+                                {{user.following.count}}
+                            </footer>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 </body>

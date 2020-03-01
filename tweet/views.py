@@ -60,12 +60,15 @@ def index(request):
 
 def tweet_detail_view(request, tweet_id):
     tweet = None
+    users = None
 
     try:
+        users = TwitterUser.objects.all()
         tweet = Tweet.objects.get(id=tweet_id)
     except Exception:
         return HttpResponseRedirect(reverse('homepage'))
 
     return render(request, 'tweet-detail.html', {
-        'tweet': tweet
+        'tweet': tweet,
+        'users': users
     })
