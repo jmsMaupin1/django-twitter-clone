@@ -1,14 +1,25 @@
 from django.shortcuts import render, reverse, HttpResponseRedirect
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate
+from django.views import View
 
 from twitteruser.models import TwitterUser
 from authentication.forms import LoginForm, RegisterForm
 
 
 # Create your views here.
-def login_view(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
+class AuthenticationForm(View):
+    template = 'generic_form.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template, {'form': form})
+
+
+class LoginFormView(AuthenticationForm):
+    form_class = LoginForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
 
         if form.is_valid():
             data = form.cleaned_data
@@ -21,13 +32,12 @@ def login_view(request):
                 login(request, user)
                 return HttpResponseRedirect(reverse('homepage'))
 
-    form = LoginForm()
-    return render(request, 'generic_form.html', {'form': form})
 
+class RegisterFormView(AuthenticationForm):
+    form_class = RegisterForm
 
-def register(request):
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
 
         if form.is_valid():
             data = form.cleaned_data
@@ -37,10 +47,3 @@ def register(request):
             )
             login(request, user)
             return HttpResponseRedirect(reverse('homepage'))
-
-    else:
-        form = RegisterForm()
-
-    return render(request, 'generic_form.html', {
-        'form': form
-    })
